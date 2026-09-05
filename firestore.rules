@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Common helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Public test probe
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // 1. Core Users Collection (keyed by Firebase Auth UID)
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      // Backwards-compatible subcollections
+      match /{subcollection}/{docId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // 2. Farmer Profiles Collection (keyed by Firebase Auth UID)
+    match /farmerProfiles/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // 3. Crops Collection (filtered by owner userId)
+    match /crops/{cropId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // 4. Disease Predictions Collection (filtered by owner userId)
+    match /diseasePredictions/{predictionId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // 5. Disease History Collection (filtered by owner userId)
+    match /diseaseHistory/{historyId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // Default deny any unlisted collection
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+

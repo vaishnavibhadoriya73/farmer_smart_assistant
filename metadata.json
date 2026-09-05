@@ -1,0 +1,11 @@
+{
+  "name": "Remix KisanAI - Smart Agriculture \u0026 AI Farming Platform",
+  "description": "Intelligent farming companion for crop disease diagnosis, weather intelligence, mandi prices, soil health, and voice-assisted agricultural decision making.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

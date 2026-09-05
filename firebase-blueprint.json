@@ -1,0 +1,139 @@
+{
+  "$schema": "https://raw.githubusercontent.com/firebase/firebase-tools/master/schema/firestore-blueprint.json",
+  "entities": {
+    "users": {
+      "path": "/users/{userId}",
+      "description": "Core user account authentication records keyed by Firebase Auth UID.",
+      "readRules": "request.auth != null && request.auth.uid == userId",
+      "writeRules": "request.auth != null && request.auth.uid == userId",
+      "schema": {
+        "properties": {
+          "id": { "type": "string" },
+          "uid": { "type": "string" },
+          "email": { "type": "string" },
+          "displayName": { "type": "string" },
+          "phone": { "type": "string" },
+          "photoURL": { "type": "string" },
+          "role": { "type": "string" },
+          "createdAt": { "type": "string" },
+          "updatedAt": { "type": "string" }
+        }
+      }
+    },
+    "farmerProfiles": {
+      "path": "/farmerProfiles/{userId}",
+      "description": "Comprehensive agronomic farmer profiles keyed by Firebase Auth UID.",
+      "readRules": "request.auth != null && request.auth.uid == userId",
+      "writeRules": "request.auth != null && request.auth.uid == userId",
+      "schema": {
+        "properties": {
+          "id": { "type": "string" },
+          "userId": { "type": "string" },
+          "fullName": { "type": "string" },
+          "name": { "type": "string" },
+          "phone": { "type": "string" },
+          "kisanId": { "type": "string" },
+          "language": { "type": "string" },
+          "district": { "type": "string" },
+          "village": { "type": "string" },
+          "state": { "type": "string" },
+          "location": { "type": "string" },
+          "totalLandAcres": { "type": "number" },
+          "landArea": { "type": "number" },
+          "mainCrop": { "type": "string" },
+          "soilType": { "type": "string" },
+          "irrigationSource": { "type": "string" },
+          "irrigationType": { "type": "string" },
+          "avatarUrl": { "type": "string" },
+          "registeredCropsCount": { "type": "number" },
+          "soilHealthStatus": { "type": "string" },
+          "isRegistered": { "type": "boolean" },
+          "createdAt": { "type": "string" },
+          "updatedAt": { "type": "string" }
+        }
+      }
+    },
+    "crops": {
+      "path": "/crops/{cropId}",
+      "description": "Farmer crop plots and cultivation cycles filtered by owner userId.",
+      "readRules": "request.auth != null && resource.data.userId == request.auth.uid",
+      "writeRules": "request.auth != null && (resource == null || resource.data.userId == request.auth.uid) && request.resource.data.userId == request.auth.uid",
+      "schema": {
+        "properties": {
+          "id": { "type": "string" },
+          "userId": { "type": "string" },
+          "name": { "type": "string" },
+          "variety": { "type": "string" },
+          "category": { "type": "string" },
+          "sowingDate": { "type": "string" },
+          "harvestDate": { "type": "string" },
+          "plotSizeAcres": { "type": "number" },
+          "stage": { "type": "string" },
+          "progressPercentage": { "type": "number" },
+          "healthStatus": { "type": "string" },
+          "soilMoisture": { "type": "number" },
+          "temperature": { "type": "number" },
+          "nextAction": { "type": "string" },
+          "expectedYieldQuintals": { "type": "number" },
+          "estimatedRevenue": { "type": "number" },
+          "image": { "type": "string" },
+          "createdAt": { "type": "string" },
+          "updatedAt": { "type": "string" }
+        }
+      }
+    },
+    "diseasePredictions": {
+      "path": "/diseasePredictions/{predictionId}",
+      "description": "Saved agronomic predictions, yield projections, and pest risk forecasts.",
+      "readRules": "request.auth != null && resource.data.userId == request.auth.uid",
+      "writeRules": "request.auth != null && (resource == null || resource.data.userId == request.auth.uid) && request.resource.data.userId == request.auth.uid",
+      "schema": {
+        "properties": {
+          "id": { "type": "string" },
+          "userId": { "type": "string" },
+          "type": { "type": "string" },
+          "cropName": { "type": "string" },
+          "landAcres": { "type": "number" },
+          "plotSizeAcres": { "type": "number" },
+          "predictedAmount": { "type": "number" },
+          "unit": { "type": "string" },
+          "confidenceScore": { "type": "number" },
+          "factors": { "type": "array" },
+          "recommendation": { "type": "string" },
+          "data": { "type": "object" },
+          "createdAt": { "type": "string" },
+          "timestamp": { "type": "string" }
+        }
+      }
+    },
+    "diseaseHistory": {
+      "path": "/diseaseHistory/{historyId}",
+      "description": "Historical crop leaf disease diagnoses, pest detections, and advisory prescriptions.",
+      "readRules": "request.auth != null && resource.data.userId == request.auth.uid",
+      "writeRules": "request.auth != null && (resource == null || resource.data.userId == request.auth.uid) && request.resource.data.userId == request.auth.uid",
+      "schema": {
+        "properties": {
+          "id": { "type": "string" },
+          "userId": { "type": "string" },
+          "cropName": { "type": "string" },
+          "diseaseName": { "type": "string" },
+          "nameMr": { "type": "string" },
+          "nameHi": { "type": "string" },
+          "type": { "type": "string" },
+          "confidenceScore": { "type": "number" },
+          "severity": { "type": "string" },
+          "imageUrl": { "type": "string" },
+          "detectedAt": { "type": "string" },
+          "symptoms": { "type": "array" },
+          "causes": { "type": "array" },
+          "treatment": { "type": "array" },
+          "organicRemedies": { "type": "array" },
+          "chemicalRemedies": { "type": "array" },
+          "preventiveMeasures": { "type": "array" },
+          "expertAdvice": { "type": "string" },
+          "createdAt": { "type": "string" }
+        }
+      }
+    }
+  }
+}
